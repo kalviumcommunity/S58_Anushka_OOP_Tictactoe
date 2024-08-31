@@ -1,4 +1,5 @@
 #include<iostream>
+#include<string>
 using namespace std;
 
 class TicTacToe {
@@ -8,14 +9,14 @@ private:
 
 public:
     TicTacToe() {
-        this->resetBoard();  // Using `this` pointer
-        this->turn = 1;      // Using `this` pointer
+        this->resetBoard();
+        this->turn = 1;
     }
     
     void resetBoard() {
         for(int i = 0; i < 3; i++) {
             for(int j = 0; j < 3; j++) {
-                this->board[i][j] = '-';  // Using `this` pointer
+                this->board[i][j] = '-';
             }
         }
     }
@@ -72,7 +73,7 @@ public:
         } else {
             this->board[row][col] = 'O';
         }
-        this->turn = (this->turn + 1) % 2; // Using `this` pointer
+        this->turn = (this->turn + 1) % 2;
     }
 
     bool isOccupied(int row, int col) {
@@ -93,7 +94,8 @@ public:
 };
 
 int main() {
-    TicTacToe game;
+    TicTacToe games[1];  // Array of 1 TicTacToe object
+
     string temp_turn;
 
     cout << "Player-1 will play with 'X'\n";
@@ -104,10 +106,10 @@ int main() {
         getline(cin, temp_turn);
 
         if(temp_turn == "1") {
-            game.setTurn(1);
+            games[0].setTurn(1);
             break;
         } else if(temp_turn == "2") {
-            game.setTurn(0);
+            games[0].setTurn(0);
             break;
         } else {
             cout << "Wrong Input! Try Again\n\n";
@@ -124,22 +126,22 @@ int main() {
 
             if(row <= 0 || row >= 4 || col <= 0 || col >= 4) {
                 cout << "Invalid Input! Try Again\n";
-            } else if(game.isOccupied(row-1, col-1)) {
+            } else if(games[0].isOccupied(row-1, col-1)) {
                 cout << "Place Already Filled! Try Again\n";
             } else {
                 break;
             }
         }
         
-        game.makeMove(row-1, col-1);
-        game.displayBoard();
+        games[0].makeMove(row-1, col-1);
+        games[0].displayBoard();
 
-        if(game.checkWin()) {
-            cout << (game.getCurrentTurn() == 0 ? "Player-2 won the game!\n" : "Player-1 won the game!\n");
+        if(games[0].checkWin()) {
+            cout << (games[0].getCurrentTurn() == 0 ? "Player-2 won the game!\n" : "Player-1 won the game!\n");
             break;
         }
 
-        if(game.isFull()) {
+        if(games[0].isFull()) {
             cout << "\n****It's a tie!!****\n";
             cout << "Board has been completely filled\n";
             break;

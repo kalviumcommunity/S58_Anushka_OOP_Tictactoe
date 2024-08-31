@@ -1,9 +1,6 @@
 #include<iostream>
 using namespace std;
 
-#include<iostream>
-using namespace std;
-
 class TicTacToe {
 private:
     char board[3][3];
@@ -11,30 +8,30 @@ private:
 
 public:
     TicTacToe() {
-        resetBoard();
-        turn = 1;  // Default starting turn
+        this->resetBoard();  // Using `this` pointer
+        this->turn = 1;      // Using `this` pointer
     }
     
     void resetBoard() {
         for(int i = 0; i < 3; i++) {
             for(int j = 0; j < 3; j++) {
-                board[i][j] = '-';
+                this->board[i][j] = '-';  // Using `this` pointer
             }
         }
     }
     
     void displayBoard() {
         cout << "\n";
-        cout << board[0][0] << " | " << board[0][1] << " | " << board[0][2] << endl;
+        cout << this->board[0][0] << " | " << this->board[0][1] << " | " << this->board[0][2] << endl;
         cout << "---------\n";
-        cout << board[1][0] << " | " << board[1][1] << " | " << board[1][2] << endl;
+        cout << this->board[1][0] << " | " << this->board[1][1] << " | " << this->board[1][2] << endl;
         cout << "---------\n";
-        cout << board[2][0] << " | " << board[2][1] << " | " << board[2][2] << endl;
+        cout << this->board[2][0] << " | " << this->board[2][1] << " | " << this->board[2][2] << endl;
     }
 
     bool checkRow() {
         for(int i = 0; i < 3; i++) {
-            if(board[i][0] != '-' && board[i][0] == board[i][1] && board[i][1] == board[i][2]) {
+            if(this->board[i][0] != '-' && this->board[i][0] == this->board[i][1] && this->board[i][1] == this->board[i][2]) {
                 return true;
             }
         }
@@ -43,7 +40,7 @@ public:
     
     bool checkCol() {
         for(int i = 0; i < 3; i++) {
-            if(board[0][i] != '-' && board[0][i] == board[1][i] && board[1][i] == board[2][i]) {
+            if(this->board[0][i] != '-' && this->board[0][i] == this->board[1][i] && this->board[1][i] == this->board[2][i]) {
                 return true;
             }
         }
@@ -51,17 +48,17 @@ public:
     }
 
     bool checkDiag1() {
-        return (board[0][0] != '-' && board[0][0] == board[1][1] && board[1][1] == board[2][2]);
+        return (this->board[0][0] != '-' && this->board[0][0] == this->board[1][1] && this->board[1][1] == this->board[2][2]);
     }
 
     bool checkDiag2() {
-        return (board[0][2] != '-' && board[0][2] == board[1][1] && board[1][1] == board[2][0]);
+        return (this->board[0][2] != '-' && this->board[0][2] == this->board[1][1] && this->board[1][1] == this->board[2][0]);
     }
 
     bool isFull() {
         for(int i = 0; i < 3; i++) {
             for(int j = 0; j < 3; j++) {
-                if(board[i][j] == '-') {
+                if(this->board[i][j] == '-') {
                     return false;
                 }
             }
@@ -70,28 +67,28 @@ public:
     }
 
     void makeMove(int row, int col) {
-        if(turn == 1) {
-            board[row][col] = 'X';
+        if(this->turn == 1) {
+            this->board[row][col] = 'X';
         } else {
-            board[row][col] = 'O';
+            this->board[row][col] = 'O';
         }
-        turn = (turn + 1) % 2; // Switch turns
+        this->turn = (this->turn + 1) % 2; // Using `this` pointer
     }
 
     bool isOccupied(int row, int col) {
-        return (board[row][col] == 'X' || board[row][col] == 'O');
+        return (this->board[row][col] == 'X' || this->board[row][col] == 'O');
     }
 
     bool checkWin() {
-        return checkRow() || checkCol() || checkDiag1() || checkDiag2();
+        return this->checkRow() || this->checkCol() || this->checkDiag1() || this->checkDiag2();
     }
 
     int getCurrentTurn() {
-        return turn;
+        return this->turn;
     }
 
     void setTurn(int player) {
-        turn = player;
+        this->turn = player;
     }
 };
 

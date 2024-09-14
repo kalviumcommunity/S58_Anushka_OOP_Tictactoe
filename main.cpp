@@ -94,7 +94,7 @@ public:
 };
 
 int main() {
-    TicTacToe games[1];  // Array of 1 TicTacToe object
+    TicTacToe* game = new TicTacToe();  // Dynamic memory allocation
 
     string temp_turn;
 
@@ -106,10 +106,10 @@ int main() {
         getline(cin, temp_turn);
 
         if(temp_turn == "1") {
-            games[0].setTurn(1);
+            game->setTurn(1);
             break;
         } else if(temp_turn == "2") {
-            games[0].setTurn(0);
+            game->setTurn(0);
             break;
         } else {
             cout << "Wrong Input! Try Again\n\n";
@@ -126,25 +126,28 @@ int main() {
 
             if(row <= 0 || row >= 4 || col <= 0 || col >= 4) {
                 cout << "Invalid Input! Try Again\n";
-            } else if(games[0].isOccupied(row-1, col-1)) {
+            } else if(game->isOccupied(row-1, col-1)) {
                 cout << "Place Already Filled! Try Again\n";
             } else {
                 break;
             }
         }
         
-        games[0].makeMove(row-1, col-1);
-        games[0].displayBoard();
+        game->makeMove(row-1, col-1);
+        game->displayBoard();
 
-        if(games[0].checkWin()) {
-            cout << (games[0].getCurrentTurn() == 0 ? "Player-2 won the game!\n" : "Player-1 won the game!\n");
+        if(game->checkWin()) {
+            cout << (game->getCurrentTurn() == 0 ? "Player-2 won the game!\n" : "Player-1 won the game!\n");
             break;
         }
 
-        if(games[0].isFull()) {
+        if(game->isFull()) {
             cout << "\n****It's a tie!!****\n";
             cout << "Board has been completely filled\n";
             break;
         }
     }
+
+    delete game;  // Free the dynamically allocated memory
+    return 0;
 }

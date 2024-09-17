@@ -6,11 +6,14 @@ class TicTacToe {
 private:
     char board[3][3];
     int turn;
+    static int gameCount;  // Static variable to track the number of games
+    static int totalMoves; // Static variable to track total moves made across all games
 
 public:
     TicTacToe() {
         this->resetBoard();
         this->turn = 1;
+        gameCount++;  // Increment game count when a new game starts
     }
     
     void resetBoard() {
@@ -74,6 +77,7 @@ public:
             this->board[row][col] = 'O';
         }
         this->turn = (this->turn + 1) % 2;
+        totalMoves++;  // Increment total move count whenever a move is made
     }
 
     bool isOccupied(int row, int col) {
@@ -91,7 +95,19 @@ public:
     void setTurn(int player) {
         this->turn = player;
     }
+
+    static int getGameCount() {  // Getter for static gameCount
+        return gameCount;
+    }
+
+    static int getTotalMoves() {  // Getter for static totalMoves
+        return totalMoves;
+    }
 };
+
+// Initializing static variables
+int TicTacToe::gameCount = 0;
+int TicTacToe::totalMoves = 0;
 
 int main() {
     TicTacToe* game = new TicTacToe();  // Dynamic memory allocation
@@ -147,6 +163,10 @@ int main() {
             break;
         }
     }
+
+    // Displaying static variables
+    cout << "Total number of games played: " << TicTacToe::getGameCount() << endl;
+    cout << "Total number of moves made: " << TicTacToe::getTotalMoves() << endl;
 
     delete game;  // Free the dynamically allocated memory
     return 0;

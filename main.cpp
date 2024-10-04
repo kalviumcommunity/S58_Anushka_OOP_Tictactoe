@@ -96,11 +96,11 @@ public:
         this->turn = player;
     }
 
-    static int getGameCount() {  // Getter for static gameCount
+    static int getGameCount() {  // Static member function for game count
         return gameCount;
     }
 
-    static int getTotalMoves() {  // Getter for static totalMoves
+    static int getTotalMoves() {  // Static member function for total number of moves
         return totalMoves;
     }
 };
@@ -164,7 +164,7 @@ int main() {
         }
     }
 
-    // Displaying static variables
+    // Calling static member function, displaying the game count and total number of moves
     cout << "Total number of games played: " << TicTacToe::getGameCount() << endl;
     cout << "Total number of moves made: " << TicTacToe::getTotalMoves() << endl;
 

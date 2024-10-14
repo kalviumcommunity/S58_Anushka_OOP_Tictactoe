@@ -4,18 +4,37 @@ using namespace std;
 
 class TicTacToe {
 private:
-    char board[3][3];   // Private: Hides the internal representation of the board
-    int turn;           // Private: Hides the internal state of whose turn it is
+    char board[3][3];    // Private: Hides the internal representation of the board
+    int turn;            // Private: Hides the internal state of whose turn it is
     static int gameCount;  // Static variable to track the number of games
     static int totalMoves; // Static variable to track total moves made across all games
 
 public:
+    // 1. Default Constructor
     TicTacToe() {
         this->resetBoard();  // Public: Allows the board to be reset
-        this->turn = 1;  // Sets the initial turn
-        gameCount++;  // Increment game count when a new game starts
+        this->turn = 1;      // Sets the initial turn to Player-1 ('X')
+        gameCount++;          // Increment game count when a new game starts
+        cout << "Default Constructor called. New game initialized.\n";
     }
-    
+
+    // 2. Parameterized Constructor
+    TicTacToe(char initialBoard[3][3], int initialTurn) {
+        for(int i = 0; i < 3; i++) {          // Initialize board with provided values
+            for(int j = 0; j < 3; j++) {
+                this->board[i][j] = initialBoard[i][j];
+            }
+        }
+        this->turn = initialTurn;             // Set the initial turn
+        gameCount++;                           // Increment game count when a new game starts
+        cout << "Parameterized Constructor called. Custom game initialized.\n";
+    }
+
+    // 3. Destructor
+    ~TicTacToe() {
+        cout << "Destructor called. Game ended.\n";
+    }
+
     void resetBoard() {  // Public: Allows access to reset the board
         // Abstraction hides how the board is reset
         for(int i = 0; i < 3; i++) {
@@ -24,7 +43,7 @@ public:
             }
         }
     }
-    
+
     void displayBoard() {  // Public: Allows the user to see the board
         // Abstracts the board's internal structure and presents it in a user-friendly format
         cout << "\n";
@@ -119,7 +138,16 @@ int TicTacToe::gameCount = 0;
 int TicTacToe::totalMoves = 0;
 
 int main() {
-    TicTacToe* game = new TicTacToe();  // Dynamic memory allocation
+    // Using Default Constructor
+    TicTacToe* game1 = new TicTacToe();  // Dynamic memory allocation
+
+    // Using Parameterized Constructor
+    char initialBoard[3][3] = {
+        {'X', 'O', 'X'},
+        {'O', 'X', 'O'},
+        {'-', '-', '-'}
+    };
+    TicTacToe* game2 = new TicTacToe(initialBoard, 0);  // Player-2 starts
 
     string temp_turn;
 
@@ -131,10 +159,10 @@ int main() {
         getline(cin, temp_turn);
 
         if(temp_turn == "1") {
-            game->setTurn(1);
+            game1->setTurn(1);
             break;
         } else if(temp_turn == "2") {
-            game->setTurn(0);
+            game1->setTurn(0);
             break;
         } else {
             cout << "Wrong Input! Try Again\n\n";
@@ -151,32 +179,35 @@ int main() {
 
             if(row <= 0 || row >= 4 || col <= 0 || col >= 4) {
                 cout << "Invalid Input! Try Again\n";
-            } else if(game->isOccupied(row-1, col-1)) {
+            } else if(game1->isOccupied(row-1, col-1)) {
                 cout << "Place Already Filled! Try Again\n";
             } else {
                 break;
             }
         }
         
-        game->makeMove(row-1, col-1);
-        game->displayBoard();
+        game1->makeMove(row-1, col-1);
+        game1->displayBoard();
 
-        if(game->checkWin()) {
-            cout << (game->getCurrentTurn() == 0 ? "Player-2 won the game!\n" : "Player-1 won the game!\n");
+        if(game1->checkWin()) {
+            cout << (game1->getCurrentTurn() == 0 ? "Player-2 won the game!\n" : "Player-1 won the game!\n");
             break;
         }
 
-        if(game->isFull()) {
+        if(game1->isFull()) {
             cout << "\n****It's a tie!!****\n";
             cout << "Board has been completely filled\n";
             break;
         }
     }
 
-    // Calling static member functions, displaying the game count and total number of moves
+    // Displaying game statistics
     cout << "Total number of games played: " << TicTacToe::getGameCount() << endl;
     cout << "Total number of moves made: " << TicTacToe::getTotalMoves() << endl;
 
-    delete game;  // Free the dynamically allocated memory
+    // Deleting dynamically allocated memory to call destructors
+    delete game1;  // Destructor called for game1
+    delete game2;  // Destructor called for game2
+
     return 0;
 }

@@ -88,9 +88,13 @@ public:
         return this->checkRow() || this->checkCol() || this->checkDiag1() || this->checkDiag2();
     }
 
+    // Getter method to check the turn 
+
     int getCurrentTurn() {
         return this->turn;
     }
+
+    // Setter method to check the turn 
 
     void setTurn(int player) {
         this->turn = player;

@@ -60,6 +60,7 @@ public:
         return (checkRow() || checkCol() || checkDiag1() || checkDiag2());
     }
 
+    // Function Overloading: makeMove with row and column as integers
     void makeMove(int row, int col) {
         if(this->turn == 1) {
             this->board[row][col] = 'X';
@@ -68,6 +69,17 @@ public:
         }
         this->turn = (this->turn + 1) % 2;
         totalMoves++;  // Increment total moves
+    }
+
+    // Function Overloading: makeMove with row and column as a single string input (e.g., "1 2")
+    void makeMove(const string& input) {
+        int row = input[0] - '0';
+        int col = input[2] - '0';
+        if (row >= 0 && row < 3 && col >= 0 && col < 3 && !isOccupied(row, col)) {
+            makeMove(row, col);  // Call the other makeMove function with integer arguments
+        } else {
+            cout << "Invalid move. Try again.\n";
+        }
     }
 
     bool isOccupied(int row, int col) {
@@ -129,16 +141,19 @@ int main() {
     TicTacToe* game = new TicTacToe();
     game->displayBoard();
 
-    int row, col;
+    string input;
     while(true) {
         // Player's move
-        cout << "Player " << (game->getTurn() == 1 ? "1 (X)" : "2 (O)") << ", enter your move (row and column): ";
-        cin >> row >> col;
-        if (row < 0 || row >= 3 || col < 0 || col >= 3 || game->isOccupied(row, col)) {
-            cout << "Invalid move. Try again.\n";
+        cout << "Player " << (game->getTurn() == 1 ? "1 (X)" : "2 (O)") << ", enter your move (row and column separated by space or as 'row col'): ";
+        getline(cin, input);
+
+        if (input.size() == 3 && isdigit(input[0]) && input[1] == ' ' && isdigit(input[2])) {
+            game->makeMove(input);  // Call overloaded makeMove function with string input
+        } else {
+            cout << "Invalid move format. Enter two digits separated by space.\n";
             continue;
         }
-        game->makeMove(row, col);
+
         game->displayBoard();
 
         // Check if current player won

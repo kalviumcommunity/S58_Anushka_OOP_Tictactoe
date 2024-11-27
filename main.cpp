@@ -3,6 +3,8 @@
 using namespace std;
 
 // Base class for games, providing common functionalities for all games
+// Adheres to SRP by focusing only on responsibilities common to all games
+// Supports OCP by allowing new game types to extend this class without modifying it
 class Game {
 protected:
     static int gameCount;  // Static variable to track the total number of games created
@@ -12,11 +14,13 @@ public:
     Game() {
         gameCount++;
     }
-    
-    // Pure virtual function for resetting the game board; must be implemented by derived classes
+
+    // Pure virtual function for resetting the game board
+    // Enforces OCP by defining a contract that derived classes must implement
     virtual void resetBoard() = 0;
 
     // Static function to get the total number of games created
+    // Demonstrates SRP by handling the specific responsibility of tracking game instances
     static int getGameCount() {
         return gameCount;
     }
@@ -26,6 +30,7 @@ public:
 int Game::gameCount = 0;
 
 // Derived class for Tic-Tac-Toe game, inheriting from Game (Single Inheritance)
+// Adheres to SRP by handling all responsibilities specific to Tic-Tac-Toe
 class TicTacToe : public Game {
 protected:
     char board[3][3];  // 2D array to represent the Tic-Tac-Toe board
@@ -34,6 +39,7 @@ protected:
 
 public:
     // Constructor initializes the board and sets the first turn
+    // Utilizes OCP by extending the Game class and implementing game-specific logic
     TicTacToe() {
         this->resetBoard();  // Reset the board to its initial state
         this->turn = 1;      // Player 1 starts first
@@ -46,6 +52,7 @@ public:
     }
 
     // Override the pure virtual function from Game to reset the board
+    // Demonstrates OCP by customizing the behavior for Tic-Tac-Toe
     void resetBoard() override {
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
@@ -55,6 +62,7 @@ public:
     }
 
     // Function to display the current state of the board
+    // Part of SRP, focusing on displaying the board for Tic-Tac-Toe
     void displayBoard() {
         cout << "\n";
         cout << this->board[0][0] << " | " << this->board[0][1] << " | " << this->board[0][2] << endl;
@@ -65,12 +73,14 @@ public:
     }
 
     // Function to check if a player has won
+    // Encapsulates win-checking logic, adhering to SRP by focusing on game-specific rules
     bool checkWin() {
         // Check all possible winning conditions
         return (checkRow() || checkCol() || checkDiag1() || checkDiag2());
     }
 
     // Function Overloading: makeMove with row and column as integers
+    // Demonstrates SRP by encapsulating move logic specific to Tic-Tac-Toe
     void makeMove(int row, int col) {
         // Assign 'X' or 'O' based on the current turn
         if (this->turn == 1) {
@@ -83,6 +93,7 @@ public:
     }
 
     // Function Overloading: makeMove with input as a string (e.g., "1 2")
+    // Further demonstrates SRP by providing an alternate way to make a move
     void makeMove(const string& input) {
         // Parse row and column from the input string
         int row = input[0] - '0';
@@ -97,6 +108,7 @@ public:
     }
 
     // Check if a specific cell on the board is already occupied
+    // Demonstrates SRP by focusing on checking the state of a cell
     bool isOccupied(int row, int col) {
         return (this->board[row][col] == 'X' || this->board[row][col] == 'O');
     }
@@ -114,11 +126,13 @@ public:
     }
 
     // Static function to get the total moves made across all TicTacToe games
+    // Adheres to SRP by providing statistics specific to this game
     static int getTotalMoves() {
         return totalMoves;
     }
 
     // Getter for the current player's turn
+    // Demonstrates encapsulation by providing controlled access to `turn`
     int getTurn() const {
         return turn;
     }
@@ -160,6 +174,7 @@ int TicTacToe::totalMoves = 0;
 
 int main() {
     // Create a TicTacToe game instance using dynamic memory allocation
+    // Demonstrates dynamic memory allocation and SRP by separating game management logic
     TicTacToe* game = new TicTacToe();
     game->displayBoard();  // Display the initial state of the board
 
@@ -182,22 +197,16 @@ int main() {
         // Check if the current player has won
         if (game->checkWin()) {
             cout << "Player " << (game->getTurn() == 0 ? "1 (X)" : "2 (O)") << " wins!\n";
-            break;
+            break;  // Exit the loop
         }
 
-        // Check if the game is a draw
+        // Check if the game is a draw (board is full)
         if (game->isFull()) {
             cout << "It's a draw!\n";
-            break;
+            break;  // Exit the loop
         }
     }
 
-    // Display statistics about the games
-    cout << "Total games played: " << Game::getGameCount() << endl;
-    cout << "Total moves made: " << TicTacToe::getTotalMoves() << endl;
-
-    // Free the dynamically allocated memory
-    delete game;
-
-    return 0;  // End of the program
+    delete game;  // Free the dynamically allocated memory
+    return 0;
 }
